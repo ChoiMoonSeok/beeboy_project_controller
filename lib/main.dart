@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+//import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 
 void main() => runApp(start());
+
+
+
 
 class start extends StatelessWidget{ // 초기화면 구성
   @override
@@ -11,6 +17,8 @@ class start extends StatelessWidget{ // 초기화면 구성
     );
   }
 }
+
+
 
 class FirstPage extends StatelessWidget{
   @override
@@ -25,7 +33,6 @@ class FirstPage extends StatelessWidget{
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-
 
             FloatingActionButton(
               onPressed: (){ // 버튼이 눌리어 졌을 떄
@@ -67,28 +74,116 @@ class FirstPage extends StatelessWidget{
 
 
 class SecondPage extends StatelessWidget{
+
   @override
+
+
   Widget build(BuildContext context){
+
+    String DeviceId = '34:B1:F7:D5:34:43';//'C31499B1-7E1A-CEDF-2586-2CEFCAB55E53';//'B4:52:A9:13:29:21';//'888D9FAC-0E80-37AF-ED3C-7E58444BBB81';
     return Scaffold(
       appBar: AppBar(
-        title: Text('Connect ble'),
+        title: Text('Scan ble'),
       ),
-      body: Row(
-        mainAxisSize: MainAxisSize.min,
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           RaisedButton(
             child: Text('BLE Scan'),
               onPressed: (){
-                // ble scan
-              }
+                // 블루투스 스캔 후 화면 넘기고 리스트 뷰로 정렬하기
+
+                Navigator.push(// 화면 넘기기
+                  context,
+                  MaterialPageRoute(builder: (context)=>BluetoothConnectPage()), // 다음 화면을 BluetoothConnectPage()로 구성해라.
+                );
+
+              },
+
               ),
         ],
       ),
     );
+
+
   }
 }
+
+
+class BluetoothConnectPage extends StatefulWidget{
+
+  @override
+
+  BluetoothConnectPageState createState() => BluetoothConnectPageState();
+
+}
+
+
+class BluetoothConnectPageState extends State<BluetoothConnectPage>{
+
+  //final flutterReactiveBle = FlutterReactiveBle();
+
+  FlutterBlue flutter_blue = FlutterBlue.instance;
+  bool _Scanning = false;
+  List<ScanResult> scan_results = [];
+
+  Widget widget_list_view(ScanResult r){
+    return ListTile(
+      onTap: connect_ble(r), // 리스트 타일을 누르면 블루투스 연결
+    );
+  }
+
+  connect_ble(ScanResult r) async{ // 블루투스 연결
+    await r.device.connect();
+  }
+
+  @override
+
+  Widget build(BuildContext context){
+
+    flutter_blue.startScan(timeout: Duration(seconds: 3)); // 3초간 ble스캔
+
+    var scan_result = flutter_blue.scanResults.listen((results) {
+      scan_results = results; // 리스트에 스캔한 블루투스 모듈 정보 저장
+    }
+    );
+
+    flutter_blue.stopScan();
+    var DeviceId = '34:B1:F7:D5:34:43';
+    //flutterReactiveBle.scanForDevices(withServices: [], scanMode: ScanMode.lowLatency).listen((device){
+      //print(device.id);
+    //}, onError: (){
+
+    //});
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Bluetooth connect'),
+      ),
+      body: Center(
+        /* 장치 리스트 출력 */
+
+        child: ListView.separated(
+            itemBuilder: (context, index){ // 렌더링할 타일 지정하기
+              return widget_list_view(scan_results[index]);
+            },
+            separatorBuilder: (context, index){
+              return Divider();
+            },
+            itemCount: scan_results.length, // listview의 길이 지정
+        )
+
+      ),
+    );
+    //);
+
+    }
+
+}
+
+
 
 class ThirdPage extends StatelessWidget{ // control 페이지
   @override
@@ -123,7 +218,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
             onPressed: (){
 
             },
-            child: Icon(Icons.atm),
+            child: Icon(Icons.replay),
           ),
         ),
         //1
@@ -136,7 +231,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           onPressed: (){
 
           },
-          child: Icon(Icons.arrow_upward),
+          child: Icon(Icons.keyboard_arrow_up),
           ),
         ),//2
 
@@ -149,7 +244,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
             onPressed: (){
 
             },
-            child: Icon(Icons.atm),
+            child: Icon(Icons.refresh),
           ),
         ), //3
 
@@ -161,7 +256,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
             onPressed: (){
 
             },
-            child: Icon(Icons.arrow_left),
+            child: Icon(Icons.keyboard_arrow_left),
           ),
 
         ), //4
@@ -174,7 +269,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
             onPressed: (){
 
             },
-            child: Icon(Icons.atm),
+            child: Icon(Icons.open_with),
           ),
 
         ), //5
@@ -187,7 +282,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
             onPressed: (){
 
             },
-            child: Icon(Icons.arrow_right),
+            child: Icon(Icons.keyboard_arrow_right),
           ),
         ), //6
 
@@ -211,7 +306,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
             onPressed: (){
 
             },
-            child: Icon(Icons.arrow_downward),
+            child: Icon(Icons.keyboard_arrow_down),
           ),
         ), //8
 
@@ -246,3 +341,4 @@ class ThirdPage extends StatelessWidget{ // control 페이지
 
   }
 }
+
