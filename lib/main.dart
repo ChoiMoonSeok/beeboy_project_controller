@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 //import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
+
+FlutterBlue flutter_blue = FlutterBlue.instance;
+bool _Scanning = false;
+List<ScanResult> scan_results = [];
+int num_device = 0;
+
 void main() => runApp(start());
-
-
-
 
 class start extends StatelessWidget{ // 초기화면 구성
   @override
@@ -125,10 +128,6 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage>{
 
   //final flutterReactiveBle = FlutterReactiveBle();
 
-  FlutterBlue flutter_blue = FlutterBlue.instance;
-  bool _Scanning = false;
-  List<ScanResult> scan_results = [];
-
   Widget widget_list_view(ScanResult r){
     return ListTile(
       onTap: connect_ble(r), // 리스트 타일을 누르면 블루투스 연결
@@ -145,13 +144,14 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage>{
 
     flutter_blue.startScan(timeout: Duration(seconds: 3)); // 3초간 ble스캔
 
-    var scan_result = flutter_blue.scanResults.listen((results) {
+    flutter_blue.scanResults.listen((results) {
+      scan_results.clear(); // 이전의 블루투스 정보 삭제
       scan_results = results; // 리스트에 스캔한 블루투스 모듈 정보 저장
     }
     );
 
     flutter_blue.stopScan();
-    var DeviceId = '34:B1:F7:D5:34:43';
+    //var DeviceId = '34:B1:F7:D5:34:43';
     //flutterReactiveBle.scanForDevices(withServices: [], scanMode: ScanMode.lowLatency).listen((device){
       //print(device.id);
     //}, onError: (){
@@ -167,6 +167,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage>{
 
         child: ListView.separated(
             itemBuilder: (context, index){ // 렌더링할 타일 지정하기
+              num_device = index;
               return widget_list_view(scan_results[index]);
             },
             separatorBuilder: (context, index){
@@ -186,6 +187,18 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage>{
 
 
 class ThirdPage extends StatelessWidget{ // control 페이지
+
+
+  Write_ble(ScanResult r, var a) async{
+    var char;
+    List<BluetoothService> services = await r.device.discoverServices();
+    services.forEach((service) {
+      char = service.characteristics;
+    });
+
+    await char.write[a]; // 글자 ble로 입력
+  }
+
   @override
 
   GridView Grid_9(){
@@ -216,7 +229,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
-
+              Write_ble(scan_results[num_device], '');
             },
             child: Icon(Icons.replay),
           ),
@@ -229,6 +242,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
         padding: const EdgeInsets.all(8),
         child: FloatingActionButton(
           onPressed: (){
+            Write_ble(scan_results[num_device], '');
 
           },
           child: Icon(Icons.keyboard_arrow_up),
@@ -242,6 +256,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
+              Write_ble(scan_results[num_device], '');
 
             },
             child: Icon(Icons.refresh),
@@ -254,6 +269,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
+              Write_ble(scan_results[num_device], '');
 
             },
             child: Icon(Icons.keyboard_arrow_left),
@@ -267,6 +283,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
+              Write_ble(scan_results[num_device], '');
 
             },
             child: Icon(Icons.open_with),
@@ -280,6 +297,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
+              Write_ble(scan_results[num_device], '');
 
             },
             child: Icon(Icons.keyboard_arrow_right),
@@ -292,6 +310,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
+              Write_ble(scan_results[num_device], '');
 
             },
             child: Icon(Icons.light),
@@ -304,6 +323,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
+              Write_ble(scan_results[num_device], '');
 
             },
             child: Icon(Icons.keyboard_arrow_down),
@@ -316,6 +336,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
+              Write_ble(scan_results[num_device], '');
 
             },
             child: Icon(Icons.speaker),
@@ -331,6 +352,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
 
 
   Widget build(BuildContext context){
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Control Beeboy'),
