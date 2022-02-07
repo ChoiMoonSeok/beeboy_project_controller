@@ -229,7 +229,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
-              Write_ble(scan_results[num_device], '');
+              Write_ble(scan_results[num_device], 'E');
             },
             child: Icon(Icons.replay),
           ),
@@ -242,7 +242,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
         padding: const EdgeInsets.all(8),
         child: FloatingActionButton(
           onPressed: (){
-            Write_ble(scan_results[num_device], '');
+            Write_ble(scan_results[num_device], 'U');
 
           },
           child: Icon(Icons.keyboard_arrow_up),
@@ -256,7 +256,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
-              Write_ble(scan_results[num_device], '');
+              Write_ble(scan_results[num_device], 'B');
 
             },
             child: Icon(Icons.refresh),
@@ -269,8 +269,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
-              Write_ble(scan_results[num_device], '');
-
+              Write_ble(scan_results[num_device], 'L');
             },
             child: Icon(Icons.keyboard_arrow_left),
           ),
@@ -283,7 +282,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
-              Write_ble(scan_results[num_device], '');
+              Write_ble(scan_results[num_device], 'F');
 
             },
             child: Icon(Icons.open_with),
@@ -297,7 +296,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
-              Write_ble(scan_results[num_device], '');
+              Write_ble(scan_results[num_device], 'R');
 
             },
             child: Icon(Icons.keyboard_arrow_right),
@@ -310,7 +309,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
-              Write_ble(scan_results[num_device], '');
+              Write_ble(scan_results[num_device], 'A');
 
             },
             child: Icon(Icons.light),
@@ -323,8 +322,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
-              Write_ble(scan_results[num_device], '');
-
+              Write_ble(scan_results[num_device], 'D');
             },
             child: Icon(Icons.keyboard_arrow_down),
           ),
@@ -336,8 +334,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
             onPressed: (){
-              Write_ble(scan_results[num_device], '');
-
+              Write_ble(scan_results[num_device], 'S');
             },
             child: Icon(Icons.speaker),
           ),
