@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 //import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 //import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:beeboy_project_controller/ble.dart';
 
-
-FlutterBlue flutter_blue = FlutterBlue.instance;
-bool _Scanning = false;
-List<ScanResult> scan_results = [];
-int num_device = 0;
 
 void main() => runApp(start());
 
@@ -128,35 +124,39 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage>{
 
   //final flutterReactiveBle = FlutterReactiveBle();
 
-  Widget widget_list_view(ScanResult r){
-    return ListTile(
-      onTap: connect_ble(r), // 리스트 타일을 누르면 블루투스 연결
-    );
-  }
 
-  connect_ble(ScanResult r) async{ // 블루투스 연결
-    await r.device.connect();
+  scan_ble() async{
+
+    if (!Scanning){
+
+      scan_results.clear(); // 블루투스 모듈 리스트 초기화
+
+      flutter_blue.startScan(timeout: Duration(seconds: 1)); // 블루투스를 1초간 탐색
+
+      flutter_blue.scanResults.listen((results) {
+        for (ScanResult r in results){ // 발견한 블루투스 모듈을 리스트에 저장
+          print(r.device.name);
+          scan_results = results;
+          print(scan_results.length);
+
+          setState(() {
+          });
+        }
+      }
+      );
+    } else flutter_blue.stopScan(); // 스캔 종료
   }
 
   @override
 
   Widget build(BuildContext context){
-
-    flutter_blue.startScan(timeout: Duration(seconds: 3)); // 3초간 ble스캔
-
-    flutter_blue.scanResults.listen((results) {
-      scan_results.clear(); // 이전의 블루투스 정보 삭제
-      scan_results = results; // 리스트에 스캔한 블루투스 모듈 정보 저장
-    }
-    );
-
-    flutter_blue.stopScan();
     //var DeviceId = '34:B1:F7:D5:34:43';
     //flutterReactiveBle.scanForDevices(withServices: [], scanMode: ScanMode.lowLatency).listen((device){
       //print(device.id);
     //}, onError: (){
 
-    //});
+    scan_ble();
+    //})
 
     return Scaffold(
       appBar: AppBar(
@@ -170,7 +170,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage>{
               num_device = index;
               return widget_list_view(scan_results[index]);
             },
-            separatorBuilder: (context, index){
+            separatorBuilder: (BuildContext context, int index){
               return Divider();
             },
             itemCount: scan_results.length, // listview의 길이 지정
@@ -308,6 +308,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           alignment: Alignment.center,
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
+
             onPressed: (){
               Write_ble(scan_results[num_device], 'A');
 
@@ -321,6 +322,7 @@ class ThirdPage extends StatelessWidget{ // control 페이지
           alignment: Alignment.center,
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton(
+
             onPressed: (){
               Write_ble(scan_results[num_device], 'D');
             },
