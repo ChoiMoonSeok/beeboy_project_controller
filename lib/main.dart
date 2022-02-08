@@ -53,6 +53,7 @@ class FirstPage extends StatelessWidget{
             FloatingActionButton(
               onPressed: (){ // 버튼이 눌리어 졌을 떄
                 // 블루투스 연결 화면으로 이동
+                scan_ble();
                   Navigator.push(  // 화면을 변경하는 함수
                     context,
                     MaterialPageRoute(builder: (context)=>ThirdPage()),
@@ -64,18 +65,12 @@ class FirstPage extends StatelessWidget{
 
           ],
       ),
-
     );
   }
-
-
 }
 
 
 class SecondPage extends StatelessWidget{
-
-  @override
-
 
   Widget build(BuildContext context){
 
@@ -94,14 +89,14 @@ class SecondPage extends StatelessWidget{
               onPressed: (){
                 // 블루투스 스캔 후 화면 넘기고 리스트 뷰로 정렬하기
 
+                scan_ble(); // 블루투스 스캔
                 Navigator.push(// 화면 넘기기
                   context,
                   MaterialPageRoute(builder: (context)=>BluetoothConnectPage()), // 다음 화면을 BluetoothConnectPage()로 구성해라.
                 );
 
               },
-
-              ),
+          ),
         ],
       ),
     );
@@ -120,80 +115,70 @@ class BluetoothConnectPage extends StatefulWidget{
 }
 
 
-class BluetoothConnectPageState extends State<BluetoothConnectPage>{
+class BluetoothConnectPageState extends State<BluetoothConnectPage> {
 
   //final flutterReactiveBle = FlutterReactiveBle();
 
+  BluetoothDeviceState state_now = BluetoothDeviceState.disconnected; // 현재 연결 상태
 
-  scan_ble() async{
-
-    if (!Scanning){
-
-      scan_results.clear(); // 블루투스 모듈 리스트 초기화
-
-      flutter_blue.startScan(timeout: Duration(seconds: 1)); // 블루투스를 1초간 탐색
-
-      flutter_blue.scanResults.listen((results) {
-        for (ScanResult r in results){ // 발견한 블루투스 모듈을 리스트에 저장
-          print(r.device.name);
-          scan_results = results;
-          print(scan_results.length);
-
-          setState(() {
-          });
-        }
-      }
-      );
-    } else flutter_blue.stopScan(); // 스캔 종료
+  // setState 재정의
+  void re_render(){
+    setState(() {
+    });
   }
 
   @override
-
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     //var DeviceId = '34:B1:F7:D5:34:43';
     //flutterReactiveBle.scanForDevices(withServices: [], scanMode: ScanMode.lowLatency).listen((device){
-      //print(device.id);
+    //print(device.id);
     //}, onError: (){
 
-    scan_ble();
     //})
 
     return Scaffold(
+
       appBar: AppBar(
-        title: Text('Bluetooth connect'),
+        title: Text('Bluetooth List'),
       ),
-      body: Center(
-        /* 장치 리스트 출력 */
+      body: Column(
+        children: <Widget>[
+          Expanded(child:
+            ListView.separated(
+              itemCount: scan_results.length, // 출력할 타일의 갯수
+              itemBuilder: (context, index){
+                return widget_list_view(scan_results[index]);
+              },
+              separatorBuilder: (BuildContext context, int index){
+                return Divider();
+                },
+            ),
+          ),
+          Expanded(child:
+              FloatingActionButton(
 
-        child: ListView.separated(
-            itemBuilder: (context, index){ // 렌더링할 타일 지정하기
-              num_device = index;
-              return widget_list_view(scan_results[index]);
-            },
-            separatorBuilder: (BuildContext context, int index){
-              return Divider();
-            },
-            itemCount: scan_results.length, // listview의 길이 지정
-        )
+                onPressed: () {
+                  re_render();
+                },
+                child: Icon(Icons.bluetooth_searching_rounded),
+              )
+          ),
+        ],
+      )
 
-      ),
+
     );
-    //);
-
-    }
-
+  }
 }
 
-
-
-class ThirdPage extends StatelessWidget{ // control 페이지
+  class ThirdPage extends StatelessWidget{ // control 페이지
 
 
   Write_ble(ScanResult r, var a) async{
     var char;
     List<BluetoothService> services = await r.device.discoverServices();
     services.forEach((service) {
-      char = service.characteristics;
+    char = service.characteristics;
     });
 
     await char.write[a]; // 글자 ble로 입력
@@ -203,163 +188,158 @@ class ThirdPage extends StatelessWidget{ // control 페이지
 
   GridView Grid_9(){
 
-    return GridView.count(
-      crossAxisCount: 3, // 1줄에 몇개의 위젯이 들어가는지 결정
-      crossAxisSpacing: 0, // 가로 간격
-      mainAxisSpacing: 35, // 세로 간격
+  return GridView.count(
+    crossAxisCount: 3, // 1줄에 몇개의 위젯이 들어가는지 결정
+    crossAxisSpacing: 0, // 가로 간격
+    mainAxisSpacing: 35, // 세로 간격
 
-      children: <Widget>[
+    children: <Widget>[
 
-        Container(
+    Container(
 
-        ),
+    ),
 
-        Container(
+    Container(
 
-        ),
+    ),
 
-        Container(
+    Container(
 
-        ),
-
-
-        Container(
-
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: FloatingActionButton(
-            onPressed: (){
-              Write_ble(scan_results[num_device], 'E');
-            },
-            child: Icon(Icons.replay),
-          ),
-        ),
-        //1
-
-        Container(
-
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(8),
-        child: FloatingActionButton(
-          onPressed: (){
-            Write_ble(scan_results[num_device], 'U');
-
-          },
-          child: Icon(Icons.keyboard_arrow_up),
-          ),
-        ),//2
+    ),
 
 
-        Container(
+    Container(
 
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: FloatingActionButton(
-            onPressed: (){
-              Write_ble(scan_results[num_device], 'B');
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(8),
+    child: FloatingActionButton(
+      onPressed: (){
+        Write_ble(scan_results[num_device], 'E');
+      },
+      child: Icon(Icons.replay),
+      ),
+    ),
+    //1
 
-            },
-            child: Icon(Icons.refresh),
-          ),
-        ), //3
+  Container(
 
-        Container(
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(8),
+    child: FloatingActionButton(
+    onPressed: (){
+      Write_ble(scan_results[num_device], 'U');
 
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: FloatingActionButton(
-            onPressed: (){
-              Write_ble(scan_results[num_device], 'L');
-            },
-            child: Icon(Icons.keyboard_arrow_left),
-          ),
+    },
+    child: Icon(Icons.keyboard_arrow_up),
+    ),
+  ),
+      //2
 
-        ), //4
 
-        Container(
+  Container(
 
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: FloatingActionButton(
-            onPressed: (){
-              Write_ble(scan_results[num_device], 'F');
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(8),
+    child: FloatingActionButton(
+      onPressed: (){
+        Write_ble(scan_results[num_device], 'B');
 
-            },
-            child: Icon(Icons.open_with),
-          ),
+      },
+      child: Icon(Icons.refresh),
+    ),
+  ), //3
 
-        ), //5
+  Container(
 
-        Container(
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(8),
+    child: FloatingActionButton(
+    onPressed: (){
+      Write_ble(scan_results[num_device], 'L');
+    },
+    child: Icon(Icons.keyboard_arrow_left),
+    ),
+  ), //4
 
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: FloatingActionButton(
-            onPressed: (){
-              Write_ble(scan_results[num_device], 'R');
+  Container(
 
-            },
-            child: Icon(Icons.keyboard_arrow_right),
-          ),
-        ), //6
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(8),
+    child: FloatingActionButton(
+    onPressed: (){
+      Write_ble(scan_results[num_device], 'F');
 
-        Container(
+    },
+    child: Icon(Icons.open_with),
+    ),
+  ), //5
 
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: FloatingActionButton(
+  Container(
 
-            onPressed: (){
-              Write_ble(scan_results[num_device], 'A');
+  alignment: Alignment.center,
+  padding: const EdgeInsets.all(8),
+  child: FloatingActionButton(
+    onPressed: (){
+      Write_ble(scan_results[num_device], 'R');
+    },
+    child: Icon(Icons.keyboard_arrow_right),
+    ),
+  ), //6
 
-            },
-            child: Icon(Icons.light),
-          ),
-        ), // 7
+  Container(
 
-        Container(
+  alignment: Alignment.center,
+  padding: const EdgeInsets.all(8),
+  child: FloatingActionButton(
 
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: FloatingActionButton(
+    onPressed: (){
+      Write_ble(scan_results[num_device], 'A');
+    },
+    child: Icon(Icons.light),
+    ),
+  ), // 7
 
-            onPressed: (){
-              Write_ble(scan_results[num_device], 'D');
-            },
-            child: Icon(Icons.keyboard_arrow_down),
-          ),
-        ), //8
+  Container(
 
-        Container(
+  alignment: Alignment.center,
+  padding: const EdgeInsets.all(8),
+  child: FloatingActionButton(
 
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          child: FloatingActionButton(
-            onPressed: (){
-              Write_ble(scan_results[num_device], 'S');
-            },
-            child: Icon(Icons.speaker),
-          ),
+      onPressed: (){
+        Write_ble(scan_results[num_device], 'D');
+      },
+      child: Icon(Icons.keyboard_arrow_down),
+    ),
+  ), //8
 
-        ), // 9
+  Container(
 
-      ],
+  alignment: Alignment.center,
+  padding: const EdgeInsets.all(8),
+  child: FloatingActionButton(
+    onPressed: (){
+      Write_ble(scan_results[num_device], 'S');
+    },
+    child: Icon(Icons.speaker),
+    ),
+  ), // 9
 
-    );
+  ],
+
+  );
   }
-
 
 
   Widget build(BuildContext context){
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Control Beeboy'),
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Control Beeboy'),
       ),
-      body: Grid_9(),
-      );
+    body: Grid_9(),
+    );
 
 
-  }
+    }
 }
 
