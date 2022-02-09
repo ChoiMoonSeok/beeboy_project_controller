@@ -187,6 +187,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
 
     Container(
 
+
     ),
 
     Container(
@@ -204,8 +205,10 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
     padding: const EdgeInsets.all(8),
     child: FloatingActionButton(
       onPressed: (){
-        Write_ble(E);
+        Write_ble(B);
+        //Write_stop();
       },
+
       child: Icon(Icons.replay),
       ),
     ),
@@ -231,8 +234,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
     padding: const EdgeInsets.all(8),
     child: FloatingActionButton(
       onPressed: (){
-        //Write_ble(B);
-        Write_stop();
+        Write_ble(B);
       },
       child: Icon(Icons.refresh),
     ),
