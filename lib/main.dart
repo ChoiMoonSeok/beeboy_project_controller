@@ -147,6 +147,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
             ListView.separated(
               itemCount: scan_results.length, // 출력할 타일의 갯수
               itemBuilder: (context, index){
+                num_device = index;
                 return widget_list_view(scan_results[index]);
               },
               separatorBuilder: (BuildContext context, int index){
@@ -156,7 +157,6 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
           ),
           Expanded(child:
               FloatingActionButton(
-
                 onPressed: () {
                   re_render();
                 },
@@ -165,8 +165,6 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
           ),
         ],
       )
-
-
     );
   }
 }
@@ -174,15 +172,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
   class ThirdPage extends StatelessWidget{ // control 페이지
 
 
-  Write_ble(ScanResult r, var a) async{
-    var char;
-    List<BluetoothService> services = await r.device.discoverServices();
-    services.forEach((service) {
-    char = service.characteristics;
-    });
 
-    await char.write[a]; // 글자 ble로 입력
-  }
 
   @override
 
@@ -214,7 +204,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
     padding: const EdgeInsets.all(8),
     child: FloatingActionButton(
       onPressed: (){
-        Write_ble(scan_results[num_device], 'E');
+        Write_ble(E);
       },
       child: Icon(Icons.replay),
       ),
@@ -227,8 +217,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
     padding: const EdgeInsets.all(8),
     child: FloatingActionButton(
     onPressed: (){
-      Write_ble(scan_results[num_device], 'U');
-
+      Write_ble(U);
     },
     child: Icon(Icons.keyboard_arrow_up),
     ),
@@ -242,8 +231,8 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
     padding: const EdgeInsets.all(8),
     child: FloatingActionButton(
       onPressed: (){
-        Write_ble(scan_results[num_device], 'B');
-
+        //Write_ble(B);
+        Write_stop();
       },
       child: Icon(Icons.refresh),
     ),
@@ -255,7 +244,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
     padding: const EdgeInsets.all(8),
     child: FloatingActionButton(
     onPressed: (){
-      Write_ble(scan_results[num_device], 'L');
+      Write_ble(L);
     },
     child: Icon(Icons.keyboard_arrow_left),
     ),
@@ -267,7 +256,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
     padding: const EdgeInsets.all(8),
     child: FloatingActionButton(
     onPressed: (){
-      Write_ble(scan_results[num_device], 'F');
+      Write_ble(F);
 
     },
     child: Icon(Icons.open_with),
@@ -280,7 +269,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
   padding: const EdgeInsets.all(8),
   child: FloatingActionButton(
     onPressed: (){
-      Write_ble(scan_results[num_device], 'R');
+      Write_ble(R);
     },
     child: Icon(Icons.keyboard_arrow_right),
     ),
@@ -293,7 +282,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
   child: FloatingActionButton(
 
     onPressed: (){
-      Write_ble(scan_results[num_device], 'A');
+      Write_ble(A);
     },
     child: Icon(Icons.light),
     ),
@@ -306,7 +295,7 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
   child: FloatingActionButton(
 
       onPressed: (){
-        Write_ble(scan_results[num_device], 'D');
+        Write_ble(D);
       },
       child: Icon(Icons.keyboard_arrow_down),
     ),
@@ -318,9 +307,9 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
   padding: const EdgeInsets.all(8),
   child: FloatingActionButton(
     onPressed: (){
-      Write_ble(scan_results[num_device], 'S');
+      Write_ble(S);
     },
-    child: Icon(Icons.speaker),
+    child: Icon(Icons.flashlight_off),
     ),
   ), // 9
 
