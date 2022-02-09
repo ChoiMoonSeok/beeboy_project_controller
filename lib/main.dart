@@ -169,10 +169,8 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
   }
 }
 
-  class ThirdPage extends StatelessWidget{ // control 페이지
-
-
-
+class ThirdPage extends StatelessWidget {
+    // control 페이지
 
   @override
 
@@ -185,152 +183,219 @@ class BluetoothConnectPageState extends State<BluetoothConnectPage> {
 
     children: <Widget>[
 
-    Container(
 
-
-    ),
-
-    Container(
-
-    ),
-
-    Container(
-
-    ),
-
-
-    Container(
-
-    alignment: Alignment.center,
-    padding: const EdgeInsets.all(8),
-    child: FloatingActionButton(
-      onPressed: (){
-        Write_ble(B);
-        //Write_stop();
-      },
-
-      child: Icon(Icons.replay),
+      Container(
+        // alignment: Alignment.center,
+        // padding: const EdgeInsets.all(8),
+        // child: FloatingActionButton(
+        //   onPressed: (){
+        //     Write_stop();
+        //   },
+        //   child: Icon(Icons.stop),
+        // ),
       ),
-    ),
-    //1
 
-  Container(
 
-    alignment: Alignment.center,
-    padding: const EdgeInsets.all(8),
-    child: FloatingActionButton(
-    onPressed: (){
-      Write_ble(U);
-    },
-    child: Icon(Icons.keyboard_arrow_up),
-    ),
-  ),
+      Container(
+        // child: GestureDetector(
+        //   child: Icon(Icons.refresh),
+        //   onTapUp: (TapUpDetails a){ // 버튼에서 손을 떼었을때
+        //     Write_stop();
+        //     print('a');
+        //   },
+        //   onTapDown: (TapDownDetails b){ // 버튼을 누르고 있을 때
+        //     Write_ble(B);
+        //     print('b');
+        //   },
+        // ),
+
+      ),
+
+      Container(
+
+      ),
+
+      // GestureDetector(
+      //   child: Icon(Icons.replay),
+      //   onTapDown: (){
+      //
+      //   }
+      // ),진
+
+      //왼쪽 제자리 회
+      Container(
+
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8),
+
+        child: GestureDetector(
+          child: Icon(Icons.replay),
+          onTapUp: (TapUpDetails a){
+            Write_stop();
+          },
+          onTapDown: (TapDownDetails b){
+            Write_ble(E);
+          },
+        )
+        // child: FloatingActionButton(
+        //   onPressed: (){
+        //     Write_ble(E);
+        //     //Write_stop();
+        //   },
+        //
+        // child: Icon(Icons.replay),
+        // ),
+      ),
+      //1
+
+      // 전진
+      Container(
+
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8),
+        child: GestureDetector(
+          onTapDown: (TapDownDetails b){ // 전진
+            Write_ble(U);
+          },
+          onTapUp: (TapUpDetails a){
+            Write_stop();
+          },
+          child: SizedBox(
+            width: 20,
+              height: 20,
+              child: Icon(Icons.keyboard_arrow_up)),
+        ),
+      ),
       //2
 
 
-  Container(
+      //오른쪽 제자리회전
+    Container(
+
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(8),
+      child: GestureDetector(
+        onTapDown: (TapDownDetails b){
+          Write_ble(B);
+        },
+        onTapUp: (TapUpDetails a){
+          Write_stop();
+        },
+        child: Icon(Icons.refresh),
+      ),
+    ), //3
+
+
+      //좌회전
+    Container(
+
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(8),
+      child: GestureDetector(
+        onTapDown: (TapDownDetails b){
+          Write_ble(L);
+        },
+        onTapUp: (TapUpDetails a){
+          Write_stop();
+        },
+        child: Icon(Icons.keyboard_arrow_left),
+      ),
+    ), //4
+
+
+      //돌진
+    Container(
+
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(8),
+      child: GestureDetector(
+        onTapDown: (TapDownDetails b){
+          Write_ble(F);
+        },
+        onTapUp: (TapUpDetails a){
+          Write_stop();
+        },
+        child: Icon(Icons.open_with),
+      ),
+    ), //5
+
+      //우회전
+    Container(
 
     alignment: Alignment.center,
     padding: const EdgeInsets.all(8),
-    child: FloatingActionButton(
-      onPressed: (){
-        Write_ble(B);
+    child: GestureDetector(
+      onTapDown: (TapDownDetails b){
+        Write_ble(R);
       },
-      child: Icon(Icons.refresh),
-    ),
-  ), //3
-
-  Container(
-
-    alignment: Alignment.center,
-    padding: const EdgeInsets.all(8),
-    child: FloatingActionButton(
-    onPressed: (){
-      Write_ble(L);
-    },
-    child: Icon(Icons.keyboard_arrow_left),
-    ),
-  ), //4
-
-  Container(
-
-    alignment: Alignment.center,
-    padding: const EdgeInsets.all(8),
-    child: FloatingActionButton(
-    onPressed: (){
-      Write_ble(F);
-
-    },
-    child: Icon(Icons.open_with),
-    ),
-  ), //5
-
-  Container(
-
-  alignment: Alignment.center,
-  padding: const EdgeInsets.all(8),
-  child: FloatingActionButton(
-    onPressed: (){
-      Write_ble(R);
-    },
-    child: Icon(Icons.keyboard_arrow_right),
-    ),
-  ), //6
-
-  Container(
-
-  alignment: Alignment.center,
-  padding: const EdgeInsets.all(8),
-  child: FloatingActionButton(
-
-    onPressed: (){
-      Write_ble(A);
-    },
-    child: Icon(Icons.light),
-    ),
-  ), // 7
-
-  Container(
-
-  alignment: Alignment.center,
-  padding: const EdgeInsets.all(8),
-  child: FloatingActionButton(
-
-      onPressed: (){
-        Write_ble(D);
+      onTapUp: (TapUpDetails a){
+        Write_stop();
       },
-      child: Icon(Icons.keyboard_arrow_down),
-    ),
-  ), //8
+      child: Icon(Icons.keyboard_arrow_right),
+      ),
+    ), //6
 
-  Container(
 
-  alignment: Alignment.center,
-  padding: const EdgeInsets.all(8),
-  child: FloatingActionButton(
-    onPressed: (){
-      Write_ble(S);
-    },
-    child: Icon(Icons.flashlight_off),
-    ),
-  ), // 9
+      //led on
+    Container(
+
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(8),
+    child: GestureDetector(
+
+      onTap: (){
+        Write_ble(A);
+      },
+      child: Icon(Icons.light),
+      ),
+    ), // 7
+
+      // 후진
+    Container(
+
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(8),
+    child: GestureDetector(
+        onTapDown: (TapDownDetails b){
+          Write_ble(D);
+        },
+      onTapUp: (TapUpDetails a){
+          Write_stop();
+      },
+        child: Icon(Icons.keyboard_arrow_down),
+      ),
+    ), //8
+
+
+      // led off
+    Container(
+
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(8),
+    child: GestureDetector(
+      onTap: (){
+        Write_ble(S);
+      },
+      child: Icon(Icons.flashlight_off),
+      ),
+    ), // 9
 
   ],
 
   );
   }
 
-
   Widget build(BuildContext context){
 
-  return Scaffold(
-    appBar: AppBar(
-      title: Text('Control Beeboy'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Control Beeboy'),
+        ),
+      body: Center(
+        child: Grid_9(),
       ),
-    body: Grid_9(),
-    );
 
-
+      );
     }
 }
 
