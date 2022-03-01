@@ -1,6 +1,7 @@
 # beeboy_project_controller
 
 A new Flutter project.
+해당 프로젝트는 beeboy로봇(arduino)를 hm-10 블루투스 모듈을 이용하여 제어하는 앱을 개발하는 것이 목적입니다.
 
 ## Getting Started
 
